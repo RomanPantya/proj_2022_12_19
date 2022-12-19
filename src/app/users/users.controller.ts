@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getHello } from './first.service';
+import { getHello } from './users.service';
 
 const router = Router();
 
@@ -8,4 +8,4 @@ router.get('/', (req, res) => {
     res.json(result);
 });
 
-export const firstController = router;
+export const usersController = router;
