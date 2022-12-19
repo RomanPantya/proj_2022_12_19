@@ -1,11 +1,16 @@
 import { Router } from 'express';
-import { getHello } from './users.service';
+import { createUser } from './users.service';
 
 const router = Router();
 
-router.get('/', (req, res) => {
-    const result = getHello();
-    res.json(result);
+router.post('/', async (req, res) => {
+    const user = req.body;
+    const result = await createUser(req.db, user);
+
+    res.json({
+        message: 'this user was create',
+        data: result,
+    });
 });
 
 export const usersController = router;
