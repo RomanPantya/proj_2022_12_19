@@ -79,3 +79,20 @@ export async function updateReadings(
 
     return result || null;
 }
+
+export async function removeOneReading(
+    connection: PoolClient,
+    reading: {
+        user_id: string,
+        post_id: string,
+    },
+) {
+    const { user_id, post_id } = reading;
+    const { rows: [result] } = await connection.query(`
+    delete from readings
+    where user_id = $1 and post_id = $2
+    returning *
+    `, [user_id, post_id]);
+
+    return result || null;
+}

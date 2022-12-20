@@ -1,7 +1,10 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable camelcase */
 import { Router } from 'express';
-import { createReading, updateReadings } from './readings.service';
+import {
+    createReading, updateReadings,
+    removeOneReading,
+} from './readings.service';
 
 const router = Router();
 
@@ -41,6 +44,19 @@ router.put('/', async (req, res) => {
                 data: result,
             }
             : result);
+});
+
+router.delete('/', async (req, res) => {
+    const reading = req.body;
+
+    const result = await removeOneReading(req.db, reading);
+
+    res.json(result
+        ? {
+            message: 'Thats reading was delete',
+            data: result,
+        }
+        : `Do not have reading with this data`);
 });
 
 export const readingsController = router;
