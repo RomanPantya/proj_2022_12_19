@@ -1,5 +1,7 @@
+/* eslint-disable camelcase */
 import { PoolClient } from 'pg';
 import { CreateReadingDto } from '../../dto/reading.dto/create-reading.dto';
+import { UpdateReadingDto } from '../../dto/reading.dto/update-reading.dto';
 
 export async function createReading(
     connection: PoolClient,
@@ -43,4 +45,37 @@ export async function createReading(
     // `, entries.map(([, v]) => v));
 
     // return result;
+}
+
+export async function updateReadings(
+    connection: PoolClient,
+    count: UpdateReadingDto,
+    // Pick(FullReadingDto, 'count'),
+    user_id: string,
+    post_id: string,
+) {
+    const { rows: [preCount] } = await connection.query(`
+    select count 
+    from readings
+    where user_id = $1 and post_id = $2
+    `, [user_id, post_id]);
+
+    if (!preCount) {
+        return null;
+    }
+
+    if (preCount.count >= count) {
+        const problem = 'You must put correct number in count';
+        return problem;
+    }
+
+    const { rows: [result] } = await connection.query(`
+    update readings
+    set 
+    count = $1
+    where user_id = $2 and post_id = $3
+    returning *
+    `, [count, user_id, post_id]);
+
+    return result || null;
 }
