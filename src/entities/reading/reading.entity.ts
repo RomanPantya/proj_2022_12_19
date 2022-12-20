@@ -6,4 +6,6 @@ export class ReadingEntity implements IReading {
     id_user!: number;
 
     id_post!: number;
+
+    count!: number;
 }
