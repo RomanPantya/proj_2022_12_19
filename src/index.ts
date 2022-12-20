@@ -2,6 +2,7 @@ import { generateServer } from './app/generate-server';
 import { connectToPg } from './common/connect-to-pg';
 import { usersController } from './app/users/users.controller';
 import { postsController } from './app/posts/posts.controller';
+import { readingsController } from './app/readings/readings.controller';
 
 export async function main() {
     const app = generateServer();
@@ -15,6 +16,7 @@ export async function main() {
 
     app.use('/users', usersController);
     app.use('/posts', postsController);
+    app.use('/readings', readingsController);
 
     const port = 3000;
     app.listen(port, () => {
