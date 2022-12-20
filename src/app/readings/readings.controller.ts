@@ -3,7 +3,7 @@
 import { Router } from 'express';
 import {
     createReading, updateReadings,
-    removeOneReading,
+    removeOneReading, removeReadingByUser,
 } from './readings.service';
 
 const router = Router();
@@ -44,6 +44,18 @@ router.put('/', async (req, res) => {
                 data: result,
             }
             : result);
+});
+
+router.delete('/user/:id', async (req, res) => {
+    const { id } = req.params;
+    const result = await removeReadingByUser(req.db, id);
+
+    res.json(result.length
+        ? {
+            message: 'Thats readings was delete',
+            data: result,
+        }
+        : `Do not have readings with user_id: ${id}`);
 });
 
 router.delete('/', async (req, res) => {

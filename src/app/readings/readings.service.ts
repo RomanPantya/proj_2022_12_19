@@ -54,17 +54,18 @@ export async function updateReadings(
     user_id: string,
     post_id: string,
 ) {
-    const { rows: [preCount] } = await connection.query(`
+    const { rows: [{ count: preCount }] } = await connection.query(`
     select count 
     from readings
     where user_id = $1 and post_id = $2
     `, [user_id, post_id]);
 
+    console.info(preCount);
     if (!preCount) {
         return null;
     }
 
-    if (preCount.count >= count) {
+    if (preCount >= count) {
         const problem = 'You must put correct number in count';
         return problem;
     }
@@ -95,4 +96,17 @@ export async function removeOneReading(
     `, [user_id, post_id]);
 
     return result || null;
+}
+
+export async function removeReadingByUser(
+    connection: PoolClient,
+    id: string,
+) {
+    const { rows } = await connection.query(`
+    delete from readings
+    where user_id = $1
+    returning *
+    `, [id]);
+
+    return rows;
 }
