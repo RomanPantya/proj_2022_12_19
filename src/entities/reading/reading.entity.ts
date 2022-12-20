@@ -3,9 +3,9 @@ import { IReading } from './reading.interface';
 export class ReadingEntity implements IReading {
     id!: number;
 
-    id_user!: number;
+    user_id!: number;
 
-    id_post!: number;
+    post_id!: number;
 
     count!: number;
 }
