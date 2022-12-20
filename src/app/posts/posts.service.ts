@@ -50,3 +50,18 @@ export async function getPostsByUserId(
 
     return rows;
 }
+
+export async function getAllPosts(
+    connection: PoolClient,
+    limit: string,
+    skip: string,
+) {
+    const { rows } = await connection.query(`
+    select *
+    from posts
+    limit $1
+    offset $2
+    `, [limit, skip]);
+
+    return rows;
+}

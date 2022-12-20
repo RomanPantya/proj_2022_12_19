@@ -30,10 +30,10 @@ router.get('/', async (req, res) => {
         limit?: string,
         skip?: string,
     };
-    const result = await getAllUsers(req.db, limit, skip);
-
     // const { limit = 10, skip = 0 } = req.query;
     // const result = await getAllUsers(req.db, limit as string, skip as string);
+
+    const result = await getAllUsers(req.db, limit, skip);
 
     res.json(result.length
         ? {

@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import {
     createPost, getPostById,
-    getPostsByUserId,
+    getPostsByUserId, getAllPosts,
 } from './posts.service';
 
 const router = Router();
@@ -44,6 +44,29 @@ router.get('/:id', async (req, res) => {
             data: result,
         }
         : `Do not have post with id: ${id}`);
+});
+
+router.get('/', async (req, res) => {
+    const { limit = '10', skip = '0' } = req.query as {
+      limit?: string,
+      skip?: string,
+    };
+
+    // const { limit = 10, skip = 0 } = req.query;
+    // const result = await getAllPosts(req.db, limit as string, skip as string);
+    const result = await getAllPosts(req.db, limit, skip);
+
+    res.json(result.length
+        ? result.length > 1
+            ? {
+                message: 'Thats all posts in this database',
+                data: result,
+            }
+            : {
+                message: 'Only one post in this database',
+                data: result[0],
+            }
+        : 'Do not have posts in this database');
 });
 
 export const postsController = router;
