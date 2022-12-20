@@ -37,3 +37,16 @@ export async function getPostById(
 
     return result || null;
 }
+
+export async function getPostsByUserId(
+    connection: PoolClient,
+    id: string,
+) {
+    const { rows } = await connection.query(`
+    select *
+    from posts
+    where user_id = $1
+    `, [id]);
+
+    return rows;
+}
