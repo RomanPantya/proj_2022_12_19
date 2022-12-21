@@ -47,6 +47,19 @@ export async function createReading(
     // return result;
 }
 
+export async function getReadingById(
+    connection: PoolClient,
+    id: string,
+) {
+    const { rows: [result] } = await connection.query(`
+    select *
+    from readings
+    where id = $1
+    `, [id]);
+
+    return result;
+}
+
 export async function getAllReadings(
     connection: PoolClient,
     limit: string,
