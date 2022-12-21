@@ -3,7 +3,8 @@
 import { Router } from 'express';
 import {
     createReading, updateReadings,
-    removeOneReading, removeReadingByUser,
+    removeOneReading, removeReadingsByUser,
+    removeReadingsByPost,
 } from './readings.service';
 
 const router = Router();
@@ -48,7 +49,7 @@ router.put('/', async (req, res) => {
 
 router.delete('/user/:id', async (req, res) => {
     const { id } = req.params;
-    const result = await removeReadingByUser(req.db, id);
+    const result = await removeReadingsByUser(req.db, id);
 
     res.json(result.length
         ? {
@@ -56,6 +57,18 @@ router.delete('/user/:id', async (req, res) => {
             data: result,
         }
         : `Do not have readings with user_id: ${id}`);
+});
+
+router.delete('/post/:id', async (req, res) => {
+    const { id } = req.params;
+    const result = await removeReadingsByPost(req.db, id);
+
+    res.json(result.length
+        ? {
+            message: 'Thats readings was delete',
+            data: result,
+        }
+        : `Do not have readings with post_id: ${id}`);
 });
 
 router.delete('/', async (req, res) => {

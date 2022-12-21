@@ -98,13 +98,26 @@ export async function removeOneReading(
     return result || null;
 }
 
-export async function removeReadingByUser(
+export async function removeReadingsByUser(
     connection: PoolClient,
     id: string,
 ) {
     const { rows } = await connection.query(`
     delete from readings
     where user_id = $1
+    returning *
+    `, [id]);
+
+    return rows;
+}
+
+export async function removeReadingsByPost(
+    connection: PoolClient,
+    id: string,
+) {
+    const { rows } = await connection.query(`
+    delete from readings
+    where post_id = $1
     returning *
     `, [id]);
 
