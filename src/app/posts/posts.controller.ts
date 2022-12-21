@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import {
     createPost, getPostById,
-    getPostsByUserId, getAllPosts,
+    getPostsByUserId, getAllPosts, updatePost,
 } from './posts.service';
 
 const router = Router();
@@ -67,6 +67,28 @@ router.get('/', async (req, res) => {
                 data: result[0],
             }
         : 'Do not have posts in this database');
+});
+
+router.put('/:id', async (req, res) => {
+    const { id } = req.params;
+    const correctData = Object.entries(req.body)
+        .filter(([k]) => ['title', 'summary'].includes(k));
+
+    if (!correctData.length) {
+        res.json('You must put correct data to update');
+        return;
+    }
+
+    const changeData = Object.fromEntries(correctData);
+    const result = await updatePost(req.db, id, changeData);
+
+    res.json(result
+        ? {
+            message:
+            'This post was update',
+            data: result,
+        }
+        : `Do not have post with id: ${id}`);
 });
 
 export const postsController = router;
