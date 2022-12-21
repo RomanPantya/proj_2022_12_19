@@ -73,6 +73,19 @@ export async function getReadingsByUser(
     return rows;
 }
 
+export async function getReadingsByPost(
+    connection: PoolClient,
+    id: string,
+) {
+    const { rows } = await connection.query(`
+    select *
+    from readings
+    where post_id = $1
+    `, [id]);
+
+    return rows;
+}
+
 export async function getAllReadings(
     connection: PoolClient,
     limit: string,
