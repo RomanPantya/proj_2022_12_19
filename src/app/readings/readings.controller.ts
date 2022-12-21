@@ -153,7 +153,7 @@ router.delete('/', async (req, res) => {
             message: 'Thats reading was delete',
             data: result,
         }
-        : `Do not have reading with this data`);
+        : 'Do not have reading with this data');
 });
 
 export const readingsController = router;

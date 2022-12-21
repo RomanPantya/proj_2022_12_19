@@ -2,7 +2,8 @@
 import { Router } from 'express';
 import {
     createPost, getPostById,
-    getPostsByUserId, getAllPosts, updatePost,
+    getPostsByUserId, getAllPosts,
+    updatePost, removePostById,
 } from './posts.service';
 
 const router = Router();
@@ -89,6 +90,20 @@ router.put('/:id', async (req, res) => {
             data: result,
         }
         : `Do not have post with id: ${id}`);
+});
+
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+    const result = await removePostById(req.db, id);
+
+    res.json(result
+        ? {
+            message: 'This post was delete',
+            data: result,
+        }
+        : `Do not have post with id: ${id}`);
+
+    // res.status(204).end();
 });
 
 export const postsController = router;
