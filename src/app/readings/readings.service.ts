@@ -13,7 +13,20 @@ export async function createReading(
         $1: 'user_id',
         $2: 'post_id',
     };
+    
+    const {rows: [post]} = await connection.query(`
+    select user_id
+    from posts
+    where id = $1
+    `, [reading.post_id]);
 
+    if(!post) {
+        return null;
+    }
+    if (post.user_id === reading.user_id) {
+        return null;
+
+    }
     const { rows: [result] } = await connection.query(`
     insert into readings(
       user_id,
@@ -26,7 +39,7 @@ export async function createReading(
     returning *
     `, paramsPg.map((el) => reading[mapper[el]]));
 
-    return result;
+    return result || null;
 
     // const entries = Object.entries(reading);
     // const dollars: string[] = [];

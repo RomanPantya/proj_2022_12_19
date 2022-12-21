@@ -1,6 +1,6 @@
-import type { Config } from '@jest/types';
+import type * as types from '@jest/types';
 
-export default async (): Promise<Config.InitialOptions> => ({
+export default async (): Promise<types.Config.InitialOptions> => ({
     verbose: true,
     testEnvironment: 'node',
     detectOpenHandles: true,
