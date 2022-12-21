@@ -47,6 +47,21 @@ export async function createReading(
     // return result;
 }
 
+export async function getAllReadings(
+    connection: PoolClient,
+    limit: string,
+    skip: string,
+) {
+    const { rows } = await connection.query(`
+    select *
+    from readings
+    limit $1
+    offset $2
+    `, [limit, skip]);
+
+    return rows;
+}
+
 export async function updateReadings(
     connection: PoolClient,
     count: UpdateReadingDto,

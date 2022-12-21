@@ -4,7 +4,7 @@ import { Router } from 'express';
 import {
     createReading, updateReadings,
     removeOneReading, removeReadingsByUser,
-    removeReadingsByPost,
+    removeReadingsByPost, getAllReadings,
 } from './readings.service';
 
 const router = Router();
@@ -17,6 +17,21 @@ router.post('/', async (req, res) => {
         message: 'This reading was create',
         data: result,
     });
+});
+
+router.get('/', async (req, res) => {
+    const { limit = '10', skip = '0' } = req.query as {
+        limit?: string,
+        skip?: string,
+    };
+    const result = await getAllReadings(req.db, limit, skip);
+
+    res.json(result.length
+        ? {
+            message: 'Thats all readings',
+            data: result,
+        }
+        : 'Readings is not exist');
 });
 
 router.put('/', async (req, res) => {
