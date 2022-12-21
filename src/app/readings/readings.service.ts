@@ -114,6 +114,19 @@ export async function sumReadPostsByUser(
     return sum;
 }
 
+export async function sumReadPost(
+    connection: PoolClient,
+    id: string,
+) {
+    const { rows: [{ sum }] } = await connection.query(`
+    select sum(count)
+    from readings
+    where Post_id = $1
+    `, [id]);
+
+    return sum;
+}
+
 export async function updateReadings(
     connection: PoolClient,
     count: UpdateReadingDto,

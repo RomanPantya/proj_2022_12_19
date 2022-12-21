@@ -7,6 +7,7 @@ import {
     removeReadingsByPost, getAllReadings,
     getReadingById, getReadingsByUser,
     getReadingsByPost, sumReadPostsByUser,
+    sumReadPost,
 } from './readings.service';
 
 const router = Router();
@@ -28,6 +29,15 @@ router.get('/user_posts/:id', async (req, res) => {
     res.json(result
         ? `User with id: ${id} read ${result} posts`
         : `User with id: ${id} dont read any posts`);
+});
+
+router.get('/post_users/:id', async (req, res) => {
+    const { id } = req.params;
+    const result = await sumReadPost(req.db, id);
+
+    res.json(result
+        ? `Post with id: ${id} was read ${result} counts`
+        : `Post with id: ${id} dont read anybody`);
 });
 
 router.get('/post/:id', async (req, res) => {
