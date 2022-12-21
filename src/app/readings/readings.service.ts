@@ -60,6 +60,19 @@ export async function getReadingById(
     return result;
 }
 
+export async function getReadingsByUser(
+    connection: PoolClient,
+    id: string,
+) {
+    const { rows } = await connection.query(`
+    select *
+    from readings
+    where user_id = $1
+    `, [id]);
+
+    return rows;
+}
+
 export async function getAllReadings(
     connection: PoolClient,
     limit: string,

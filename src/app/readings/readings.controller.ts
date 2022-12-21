@@ -5,7 +5,7 @@ import {
     createReading, updateReadings,
     removeOneReading, removeReadingsByUser,
     removeReadingsByPost, getAllReadings,
-    getReadingById,
+    getReadingById, getReadingsByUser,
 } from './readings.service';
 
 const router = Router();
@@ -18,6 +18,18 @@ router.post('/', async (req, res) => {
         message: 'This reading was create',
         data: result,
     });
+});
+
+router.get('/user/:id', async (req, res) => {
+    const { id } = req.params;
+    const result = await getReadingsByUser(req.db, id);
+
+    res.json(result.length
+        ? {
+            message: `Thats all readings with user_id: ${id}`,
+            data: result,
+        }
+        : `Do not have readings with user_id: ${id}`);
 });
 
 router.get('/:id', async (req, res) => {
