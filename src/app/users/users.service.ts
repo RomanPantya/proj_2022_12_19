@@ -1,5 +1,6 @@
 import { PoolClient } from 'pg';
 import { CreateUserDto } from '../../dto/user.dto/create-user.dto';
+import { UpdateUserDto } from '../../dto/user.dto/update-user.dto';
 
 export async function createUser(
     connection: PoolClient,
@@ -59,4 +60,50 @@ export async function getAllUsers(
     `, [limit, skip]);
 
     return rows;
+}
+
+export async function updateUser(
+    connection: PoolClient,
+    id: string,
+    changeData: UpdateUserDto,
+    // Partial<Omit<UserEntity, 'id' | 'email'>>,
+) {
+    const entries = Object.entries(changeData);
+    entries.push(['id', id]);
+
+    const {rows: [user]} = await connection.query(`
+    update users
+    set
+    ${entries.slice(0, -1).map(([k], i) => {
+        const dollar = `$${i + 1}`;
+        return `${k} = ${dollar}`;
+    }).join(', ')}
+    where id = $${entries.length}
+    returning *
+    `, entries.map(([, v]) => v));
+
+    return user || null;
+    // const { rows: user } = await connection.query(`
+    // select name, age, is_single
+    // from users
+    // where id = $1
+    // `, [id]);
+
+    // if (!user.length) {
+    //     return null;
+    // }
+
+    // const { name = user[0].name, age = user[0].age, is_single = user[0].is_single } = changeData;
+
+    // const { rows: [result] } = await connection.query(`
+    // update users
+    // set
+    // name = $1,
+    // age = $2,
+    // is_single = $3
+    // where id = $4
+    // returning *
+    // `, [name, age, is_single, id]);
+
+    // return result;
 }

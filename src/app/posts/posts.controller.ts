@@ -104,6 +104,8 @@ router.delete('/user/:id', async (req, res) => {
         }
         : `Do not have posts with user_id: ${id}`);
 
+        // res.status(204).end();
+
 });
 
 router.delete('/:id', async (req, res) => {
