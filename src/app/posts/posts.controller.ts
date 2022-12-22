@@ -4,6 +4,7 @@ import {
     createPost, getPostById,
     getPostsByUserId, getAllPosts,
     updatePost, removePostById,
+    removePostsByUserId,
 } from './posts.service';
 
 const router = Router();
@@ -90,6 +91,19 @@ router.put('/:id', async (req, res) => {
             data: result,
         }
         : `Do not have post with id: ${id}`);
+});
+
+router.delete('/user/:id', async (req, res) => {
+    const {id} = req.params;
+    const result = await removePostsByUserId(req.db, id);
+
+    res.json(result.length
+        ? {
+            message: 'This posts was delete',
+            data: result,
+        }
+        : `Do not have posts with user_id: ${id}`);
+
 });
 
 router.delete('/:id', async (req, res) => {
