@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { createUser, getUserById,
-    getAllUsers, updateUser, } from './users.service';
+    getAllUsers, updateUser, removeUser, } from './users.service';
 
 const router = Router();
 
@@ -61,9 +61,19 @@ router.put('/:id', async (req, res) => {
             message: 'This user was update',
             data: result,
         }
-        : `Do not have user with id: ${id}`);
+        : `Do not have user with id: ${id}`);       
+});
 
-        
-})
+router.delete('/:id', async (req, res) => {
+    const {id} = req.params;
+    const result = await removeUser(req.db, id);
+
+    res.json(result
+        ? {
+            message: `User with id: '${id}' was delete`,
+            data: result,
+        }
+        : `Do not have user with id: '${id}' in this database`);
+});
 
 export const usersController = router;
